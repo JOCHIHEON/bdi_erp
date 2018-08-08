@@ -16,15 +16,23 @@ public class UserServlet extends HttpServlet {
     private UserService us = new UserServiceImpl();	
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String id = request.getParameter("id");
-		String pwd = request.getParameter("pwd");
-		boolean isLogin = us.login(id, pwd);
+		String uri = request.getRequestURI();
+		String cmd = uri.substring(uri.lastIndexOf("/")+1);
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
-		if(isLogin) {
-			out.println("로그인 성공!");
-		}else {
-			out.println("로그인 실패.");
+		if(cmd.equals("login")) {
+			String id = request.getParameter("id");
+			String pwd = request.getParameter("pwd");
+			boolean isLogin = us.login(id, pwd);
+			if(isLogin) {
+				out.println("로그인 성공!");
+			}else {
+				out.println("로그인 실패.");
+			}
+		} else if(cmd.equals("join")) {
+			
+		} else {
+			out.println("알수 없는 요청입니다.");
 		}
 	}
 
