@@ -1,4 +1,4 @@
-package com.bdi.erp.test;
+package dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +12,34 @@ import java.util.Scanner;
 
 import com.bdi.erp.common.DBConnection;
 
-public class DBTest {
-	public static void main(String[] args) {
-		Connection con = null;
-		int cnt = 0;
-		Scanner s = new Scanner(System.in);
+import dao.UserDAO;
+
+public class UserDAOImpl implements UserDAO{
+
+	@Override
+	public boolean login(String id, String pwd) {
+
+		Connection con = DBConnection.getCon();
+		String sql = "select count(*) from user_info";
+		sql += " where uiId=? and uiPwd=?";
+		try {
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, id);
+			ps.setString(2, pwd);
+			ResultSet rs = ps.executeQuery();
+			rs.next();
+			int cnt = rs.getInt(1);
+			if(cnt==1) {
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	public List<Map<String,String>> getUserList(){
 		List<Map<String,String>> userList = new ArrayList<Map<String,String>>(); 
+		Connection con = null;
 		try {
 			con = DBConnection.getCon();
 			String sql = "select * from user_info";
@@ -48,5 +70,7 @@ public class DBTest {
 				DBConnection.closeCon();
 			}
 		}
+		return userList;
 	}
 }
+
