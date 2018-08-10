@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,23 +36,9 @@ public class UserServlet extends HttpServlet {
 			}
 		}else if(cmd.equals("list")) {
 			List<Map<String,String>> userList = us.getUserList();
-			String html = "<table border='1'>";
-			html += "<tr>";
-			html += "<th>번호</th>";
-			html += "<th>이름</th>";
-			html += "<th>아이디</th>";
-			html += "<th>이메일</th>";
-			html += "</tr>";
-			for(Map<String,String> user:userList) {
-				html += "<tr>";
-				html += "<td>" + user.get("uiNum") + "</td>";
-				html += "<td>" + user.get("uiName") + "</td>";
-				html += "<td>" + user.get("uiId") + "</td>";
-				html += "<td>" + user.get("uiEmail") + "</td>";
-				html += "</tr>";
-			}
-			html += "</table>";
-			out.println(html);
+			request.setAttribute("userList", userList);
+			RequestDispatcher rd = request.getRequestDispatcher("/views" + uri);
+			rd.forward(request, response);
 		}else if(cmd.equals("join")) {
 			
 		}else {

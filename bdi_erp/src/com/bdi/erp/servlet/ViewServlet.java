@@ -1,6 +1,8 @@
 package com.bdi.erp.servlet;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -17,8 +19,8 @@ public class ViewServlet extends HttpServlet {
 		String rPath = request.getContextPath();
 		uri = uri.replace(rPath, "");
 		uri = "/WEB-INF" + uri + ".jsp";
-		RequestDispatcher rd = 
-			request.getRequestDispatcher(uri);
+		
+		RequestDispatcher rd = request.getRequestDispatcher(uri);
 		rd.forward(request, response);
 	} 
 
