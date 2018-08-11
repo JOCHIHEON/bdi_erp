@@ -2,6 +2,7 @@ package com.bdi.erp.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,11 @@ public class UserServlet extends HttpServlet {
 				out.println("로긴 실패했어 임마~");
 			}
 		}else if(cmd.equals("list")) {
-			List<Map<String,String>> userList = us.getUserList();
+//			Map<String,String[]> param = request.getParameterMap();
+//			List<Map<String,String>> userList = us.getUserList(param);
+			String key = request.getParameter("key");
+			String value = request.getParameter("value");
+			List<Map<String,String>> userList = us.getUserList(key, value);
 			request.setAttribute("userList", userList);
 			RequestDispatcher rd = request.getRequestDispatcher("/views" + uri);
 			rd.forward(request, response);

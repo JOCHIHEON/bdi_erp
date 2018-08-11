@@ -9,6 +9,17 @@ List<Map<String,String>> userList =
 %>
 <body>
 <div class="container">
+	<div style="margin:10px;">
+		<form action="<%=rPath%>/user/list">
+			<select name ="key">
+				<option value="uiName">이름</option>
+				<option value="uiEmail">이메일</option>
+				<option value="uiId">아이디</option>
+			</select>
+			: <input type="text" name="value">
+			<button>검색1</button>
+		</form>
+	</div>
 	<table class="table table-bordered table-hover">
 		<thead>
 			<tr>

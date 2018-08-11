@@ -3,6 +3,7 @@ package dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,31 +38,31 @@ public class UserDAOImpl implements UserDAO{
 		}
 		return false;
 	}
-	public List<Map<String,String>> getUserList(){
+	public List<Map<String,String>> getUserList(String key, String value){
 		List<Map<String,String>> userList = new ArrayList<Map<String,String>>(); 
 		Connection con = null;
 		try {
 			con = DBConnection.getCon();
-			String sql = "select * from user_info";
+			String sql = "select * from user_info where 1=1 ";
+			if(key!=null && !key.equals("")) {
+				sql += " and " + key + " like ?";
+			}
 			PreparedStatement ps = con.prepareStatement(sql);
+
+			if(key!=null && !key.equals("")) {
+				ps.setString(1, "%" + value +"%");
+			}
 			ResultSet rs = ps.executeQuery();
+			ResultSetMetaData rsmt = rs.getMetaData();
+			
 			Map<String,String> userMap;
 			while(rs.next()) {
 				userMap = new HashMap<String,String>();
-				userMap.put("uiNum",rs.getString("uiNum"));
-				userMap.put("uiName",rs.getString("uiName"));
-				userMap.put("uiId",rs.getString("uiId"));
-				userMap.put("uiPwd",rs.getString("uiPwd"));
-				userMap.put("uiEmail",rs.getString("uiEmail"));
-				userMap.put("uiEtc",rs.getString("uiEtc"));
-				userMap.put("credat",rs.getString("credat"));
-				userMap.put("cretim",rs.getString("cretim"));
-				userMap.put("moddat",rs.getString("moddat"));
-				userMap.put("modtim",rs.getString("modtim"));
-				userMap.put("modusr",rs.getString("modusr"));
-				userMap.put("diNum",rs.getString("diNum"));
+				for(int i=1;i<=rsmt.getColumnCount();i++) {
+					String colNm = rsmt.getColumnLabel(i);
+					userMap.put(colNm, rs.getString(colNm));
+				}
 				userList.add(userMap);
-				System.out.println(userList);
 			}
 		}catch (SQLException e) { 
 			e.printStackTrace();
